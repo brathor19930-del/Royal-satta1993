@@ -227,3 +227,17 @@ let appSettings = {
     whatsappNumber: "919999999999",
     telegramChannel: "https://t.me/your_channel"
 };
+// Send OTP Route
+app.post("/api/send-otp", (req, res) => {
+    const { mobile } = req.body;
+    
+    if (!mobile || mobile.length < 10) {
+        return res.json({ success: false, message: "Invalid mobile number" });
+    }
+
+    // Testing ke liye fixed OTP "123456" rakhte hain taaki login karne mein koi dikkat na aaye
+    let otp = "123456"; 
+    
+    console.log(`OTP sent to ${mobile}: ${otp}`);
+    res.json({ success: true, message: "OTP bhej diya gaya hai", otp: otp });
+});
