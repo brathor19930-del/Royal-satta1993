@@ -241,3 +241,7 @@ app.post("/api/send-otp", (req, res) => {
     console.log(`OTP sent to ${mobile}: ${otp}`);
     res.json({ success: true, message: "OTP bhej diya gaya hai", otp: otp });
 });
+// Chhota aur unique redirect link (jaise /app ya /dl)
+app.get("/app", (req, res) => {
+    res.redirect("/"); // Ye aapko seedha main app par le jayega
+});
