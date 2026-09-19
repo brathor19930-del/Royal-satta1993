@@ -1,0 +1,15 @@
+{
+  "name": "matka-app",
+  "version": "1.0.0",
+  "description": "Royal Satta 1993 Platform",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.1"
+  }
+}

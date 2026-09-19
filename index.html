@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Royal Satta 1993</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 0; padding-bottom: 70px; }
+    #login-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #121212; z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+    .login-card { background: #1e1e1e; border: 2px solid #d4af37; padding: 25px; border-radius: 12px; width: 100%; max-width: 350px; text-align: center; }
+    .login-card h2 { color: #d4af37; margin-bottom: 5px; }
+    .login-card input { width: 100%; padding: 12px; margin: 8px 0; background: #2c2c2c; border: 1px solid #555; color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+    .login-card button { background: linear-gradient(135deg, #d4af37, #aa7c11); color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 10px; }
+    .trust-badge { margin-top: 25px; padding-top: 15px; border-top: 1px dashed #444; font-size: 16px; font-weight: bold; color: #d4af37; }
+    .marquee-container { background-color: #cc0000; color: #fff; white-space: nowrap; padding: 6px 0; font-size: 13px; font-weight: bold; width: 100%; position: sticky; top: 0; z-index: 101; }
+    .header { background: #1e1e1e; border-bottom: 1px solid #d4af37; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 31px; z-index: 100; }
+    .username { color: #d4af37; font-weight: bold; font-size: 18px; }
+    .wallet-pill { background: #2c2c2c; border: 1px solid #d4af37; padding: 6px 12px; border-radius: 20px; color: #d4af37; font-weight: bold; font-size: 15px; }
+    .container { padding: 12px 15px; max-width: 500px; margin: auto; }
+    .market-card { background: #1e1e1e; border: 1px solid #333; border-left: 4px solid #d4af37; padding: 12px 15px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .market-name { font-weight: bold; color: #d4af37; font-size: 16px; }
+    .play-btn { background: #d4af37; color: #000; border: none; padding: 8px 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #1a1a1a; overflow-x: hidden; transition: 0.3s; padding-top: 20px; border-right: 2px solid #d4af37; white-space: nowrap; }
+    .sidebar a { padding: 14px 20px; text-decoration: none; font-size: 16px; font-weight: bold; color: #e0e0e0; display: block; border-bottom: 1px solid #2c2c2c; }
+    .sidebar a:hover { background-color: #d4af37; color: #000; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; }
+    .modal-box { background: #1e1e1e; border: 2px solid #d4af37; padding: 22px; border-radius: 12px; width: 88%; max-width: 380px; text-align: center; position: relative; color: #fff; max-height: 85vh; overflow-y: auto; }
+    .modal-close { position: absolute; top: 8px; right: 12px; background: #d4af37; color: #000; border: none; font-weight: bold; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; }
+    .game-screen { display: none; }
+    .tabs { display: flex; background: #1e1e1e; border-radius: 6px; overflow: hidden; border: 1px solid #d4af37; margin-bottom: 12px; }
+    .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #aaa; font-weight: bold; font-size: 13px; }
+    .tab.active { background: #d4af37; color: #000; }
+    .jodi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+    .jodi-box { background: #1e1e1e; border: 1px solid #444; border-radius: 6px; padding: 6px; text-align: center; }
+    .jodi-box span { font-size: 13px; color: #d4af37; font-weight: bold; display: block; }
+    .jodi-box input { width: 100%; background: #2c2c2c; border: 1px solid #555; color: #fff; text-align: center; font-size: 13px; padding: 6px; border-radius: 4px; box-sizing: border-box; }
+    .bottom-bar { position: fixed; bottom: 60px; left: 0; right: 0; background: #1e1e1e; border-top: 1px solid #d4af37; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin: auto; z-index: 99; }
+    .submit-btn { background: linear-gradient(135deg, #d4af37, #aa7c11); color: #000; font-weight: bold; border: none; padding: 10px 22px; border-radius: 6px; cursor: pointer; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e1e1e; border-top: 1px solid #d4af37; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; max-width: 500px; margin: auto; }
+    .nav-item { text-align: center; color: #aaa; font-size: 12px; cursor: pointer; }
+    .nav-item.active { color: #d4af37; font-weight: bold; }
+  </style>
+</head>
+<body onload="initApp()">
+
+  <div id="login-overlay">
+    <div class="login-card">
+      <h2>Royal Satta 1993</h2>
+      <p>Secure Login & Registration</p>
+      <div id="step-mobile">
+        <input type="text" id="input-mobile" placeholder="Mobile Number" maxlength="10" />
+        <button onclick="sendOtpRequest()">OTP Bhejein</button>
+      </div>
+      <div id="step-otp" style="display:none;">
+        <p id="otp-info" style="font-size:12px; color:#28a745;"></p>
+        <input type="text" id="input-otp" placeholder="4 Digit OTP" maxlength="4" />
+        <input type="text" id="input-name" placeholder="Apna Naam" />
+        <input type="password" id="input-pass" placeholder="4-Digit Password" maxlength="4" />
+        <button onclick="setupAccountWithOtp()">Login Karein</button>
+      </div>
+      <div class="trust-badge">3 साल का अनुभव <br> 10000 लोगों का भरोसा</div>
+    </div>
+  </div>
+
+  <div id="custom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <h3 id="modal-title">Notice</h3>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div class="marquee-container">
+    <marquee scrollamount="5" id="marquee-text">🔥 Loading Offers... 🔥</marquee>
+  </div>
+
+  <div id="mySidebar" class="sidebar">
+    <div style="padding:15px; font-size:18px; color:#d4af37; font-weight:bold;">Menu <span style="float:right; cursor:pointer;" onclick="closeNav()">×</span></div>
+    <a href="#" onclick="showModal('History', 'No History')">📜 History</a>
+    <a href="#" onclick="logoutUser()" style="color:#ff4d4d;">🚪 Logout</a>
+  </div>
+
+  <div id="dashboard-view">
+    <div class="header">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:24px; color:#d4af37; cursor:pointer;" onclick="openNav()">☰</span>
+        <span class="username" id="display-username">Royal Player</span>
+      </div>
+      <div class="wallet-pill" id="wallet-balance">₹ 500.00</div>
+    </div>
+    <div class="container">
+      <h3 style="color: #d4af37; font-size: 15px;">Live Markets</h3>
+      <div id="markets-list"></div>
+    </div>
+  </div>
+
+  <div id="game-view" class="game-screen">
+    <div class="header">
+      <div style="display:flex; align-items:center;">
+        <span style="font-size:20px; color:#d4af37; cursor:pointer; margin-right:10px;" onclick="goBack()">←</span>
+        <span class="username" id="game-title">Market</span>
+      </div>
+      <div class="wallet-pill" id="game-wallet">₹ 500.00</div>
+    </div>
+    <div class="container" style="padding-bottom: 130px; max-height: 76vh; overflow-y: auto;">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('jodi')">JODI</div>
+        <div class="tab" onclick="switchTab('andar')">ANDAR HARUF</div>
+        <div class="tab" onclick="switchTab('bahar')">BAHAR HARUF</div>
+      </div>
+      <div id="tab-jodi" class="tab-content"><div class="jodi-grid" id="jodi-grid"></div></div>
+      <div id="tab-andar" class="tab-content" style="display:none;"><div class="jodi-grid" id="andar-grid"></div></div>
+      <div id="tab-bahar" class="tab-content" style="display:none;"><div class="jodi-grid" id="bahar-grid"></div></div>
+    </div>
+    <div class="bottom-bar">
+      <div>Total: <span id="total-bid-amount" style="color:#d4af37; font-weight:bold; font-size:16px;">₹0</span></div>
+      <button class="submit-btn" onclick="submitBids()">Submit Bids</button>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="goHome()"><span>🏠</span>Home</div>
+    <div class="nav-item" onclick="showModal('Passbook', 'No passbook found')"><span>📖</span>Passbook</div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000';
+    let loggedInMobile = localStorage.getItem('royal_user_mobile') || '';
+    let currentMarket = '';
+    let currentTab = 'jodi';
+    let userData = {};
+
+    function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+    function showModal(title, html) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('custom-modal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+
+    function initApp() {
+      if (loggedInMobile) {
+        document.getElementById('login-overlay').style.display = 'none';
+        loadWallet();
+      }
+      loadMarkets();
+      buildGrids();
+    }
+
+    let activeMobile = '';
+    async function sendOtpRequest() {
+      let mob = document.getElementById('input-mobile').value;
+      if (!mob || mob.length < 10) { alert('Valid mobile number dalein'); return; }
+      activeMobile = mob;
+      const res = await fetch(`${API_URL}/api/send-otp`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({mobile: mob}) });
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('step-mobile').style.display = 'none';
+        document.getElementById('step-otp').style.display = 'block';
+        document.getElementById('otp-info').innerText = `OTP: ${data.demoOtp}`;
+      }
+    }
+
+    async function setupAccountWithOtp() {
+      let otp = document.getElementById('input-otp').value;
+      let name = document.getElementById('input-name').value;
+      let pass = document.getElementById('input-pass').value;
+      if (!otp || !name || !pass) { alert('Sabhi details bharein'); return; }
+
+      const res = await fetch(`${API_URL}/api/register-password`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ mobile: activeMobile, username: name, password: pass })
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem('royal_user_mobile', activeMobile);
+        loggedInMobile = activeMobile;
+        document.getElementById('login-overlay').style.display = 'none';
+        loadWallet();
+      }
+    }
+
+    function logoutUser() { localStorage.removeItem('royal_user_mobile'); location.reload(); }
+
+    async function loadWallet() {
+      const res = await fetch(`${API_URL}/api/wallet`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({mobile: loggedInMobile}) });
+      const data = await res.json();
+      if (data.success) {
+        userData = data;
+        document.getElementById('wallet-balance').innerText = `₹ ${data.balance.toFixed(2)}`;
+        document.getElementById('game-wallet').innerText = `₹ ${data.balance.toFixed(2)}`;
+        document.getElementById('display-username').innerText = data.username;
+      }
+    }
+
+    async function loadMarkets() {
+      const res = await fetch(`${API_URL}/api/markets`);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('marquee-text').innerText = data.marquee;
+        const list = document.getElementById('markets-list');
+        list.innerHTML = '';
+        data.markets.forEach(m => {
+          list.innerHTML += `
+            <div class="market-card">
+              <div>
+                <div class="market-name">${m.name}</div>
+                <div style="font-size:12px; color:#aaa;">Result: <b style="color:#d4af37">${m.result}</b></div>
+              </div>
+              <button class="play-btn" onclick="openGame('${m.name}')">Play</button>
+            </div>
+          `;
+        });
+      }
+    }
+
+    function openGame(market) {
+      currentMarket = market;
+      document.getElementById('game-title').innerText = market;
+      document.getElementById('dashboard-view').style.display = 'none';
+      document.getElementById('game-view').style.display = 'block';
+    }
+    function goBack() { document.getElementById('game-view').style.display = 'none'; document.getElementById('dashboard-view').style.display = 'block'; loadWallet(); }
+    function goHome() { goBack(); }
+
+    window.switchTab = function(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+      if(tab === 'jodi') { document.querySelectorAll('.tab')[0].classList.add('active'); document.getElementById('tab-jodi').style.display = 'block'; }
+      else if(tab === 'andar') { document.querySelectorAll('.tab')[1].classList.add('active'); document.getElementById('tab-andar').style.display = 'block'; }
+      else if(tab === 'bahar') { document.querySelectorAll('.tab')[2].classList.add('active'); document.getElementById('tab-bahar').style.display = 'block'; }
+    }
+
+    function buildGrids() {
+      const jGrid = document.getElementById('jodi-grid');
+      jGrid.innerHTML = '';
+      for (let i = 0; i <= 99; i++) {
+        let n = i < 10 ? `0${i}` : `${i}`;
+        jGrid.innerHTML += `<div class="jodi-box"><span>${n}</span><input type="number" class="jodi-input" data-num="${n}" placeholder="0" oninput="calcTotal()" /></div>`;
+      }
+      const aGrid = document.getElementById('andar-grid');
+      aGrid.innerHTML = '';
+      for (let i = 0; i <= 9; i++) {
+        aGrid.innerHTML += `<div class="jodi-box"><span>${i}</span><input type="number" class="andar-input" data-num="${i}" placeholder="0" oninput="calcTotal()" /></div>`;
+      }
+      const bGrid = document.getElementById('bahar-grid');
+      bGrid.innerHTML = '';
+      for (let i = 0; i <= 9; i++) {
+        bGrid.innerHTML += `<div class="jodi-box"><span>${i}</span><input type="number" class="bahar-input" data-num="${i}" placeholder="0" oninput="calcTotal()" /></div>`;
+      }
+    }
+
+    function calcTotal() {
+      let total = 0;
+      document.querySelectorAll('.jodi-input, .andar-input, .bahar-input').forEach(inp => total += parseInt(inp.value) || 0);
+      document.getElementById('total-bid-amount').innerText = `₹${total}`;
+    }
+
+    async function submitBids() {
+      let details = [];
+      let totalAmount = 0;
+
+      document.querySelectorAll('.jodi-input').forEach(inp => {
+        let val = parseInt(inp.value) || 0;
+        if(val > 0) { details.push({number: inp.dataset.num, amount: val, type: 'Jodi'}); totalAmount += val; }
+      });
+      document.querySelectorAll('.andar-input').forEach(inp => {
+        let val = parseInt(inp.value) || 0;
+        if(val > 0) { details.push({number: inp.dataset.num, amount: val, type: 'Andar'}); totalAmount += val; }
+      });
+      document.querySelectorAll('.bahar-input').forEach(inp => {
+        let val = parseInt(inp.value) || 0;
+        if(val > 0) { details.push({number: inp.dataset.num, amount: val, type: 'Bahar'}); totalAmount += val; }
+      });
+
+      if(totalAmount <= 0) { alert('Kripya valid amount bharein!'); return; }
+
+      const res = await fetch(`${API_URL}/api/place-bid`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ mobile: loggedInMobile, market: currentMarket, totalAmount, details })
+      });
+      const data = await res.json();
+      if(data.success) {
+        alert(data.message);
+        goBack();
+      } else { alert(data.error); }
+    }
+  </script>
+</body>
+</html>
