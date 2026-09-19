@@ -824,3 +824,32 @@
             }
         });
 </script>
+<script>
+    // Raat ke waqt ya close time ke baad automatic 'Closed' aur button disable karne ka code
+    window.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        // Agar raat ke 8 baj chuke hain ya subah ke 7 se pehle hain
+        if (currentHour >= 20 || currentHour < 7) {
+            const playButtons = document.querySelectorAll('button');
+            playButtons.forEach(btn => {
+                if (btn.innerText.includes('Play')) {
+                    btn.innerText = 'Closed';
+                    btn.style.backgroundColor = '#555';
+                    btn.style.color = '#fff';
+                    btn.disabled = true;
+                }
+            });
+
+            const statusBadges = document.querySelectorAll('.running, span');
+            statusBadges.forEach(badge => {
+                if (badge.innerText === 'Running') {
+                    badge.innerText = 'Closed';
+                    badge.style.backgroundColor = 'red';
+                    badge.style.color = '#fff';
+                }
+            });
+        }
+    });
+</script>
