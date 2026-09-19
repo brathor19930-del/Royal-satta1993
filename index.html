@@ -102,19 +102,16 @@
 </head>
 <body onload="initApp()">
 
-  <!-- Mobile OTP & Password Login Overlay -->
   <div id="login-overlay">
     <div class="login-card">
       <h2>Royal Satta 1993</h2>
       <p>Secure Login & Registration</p>
       
-      <!-- Step 1: Mobile Input -->
       <div id="step-mobile">
         <input type="text" id="input-mobile" placeholder="Mobile Number darj karein" maxlength="10" />
         <button onclick="sendOtpRequest()">OTP Bhejein</button>
       </div>
 
-      <!-- Step 2: OTP Verification & Password Setup -->
       <div id="step-otp" style="display:none;">
         <p id="otp-info" style="font-size:12px; color:#28a745; margin-bottom:8px;"></p>
         <input type="text" id="input-otp" placeholder="4 Digit OTP Darj Karein" maxlength="4" />
@@ -123,7 +120,6 @@
         <button onclick="setupAccountWithOtp()">Account Banayein & Login</button>
       </div>
 
-      <!-- Hindi Trust Badge -->
       <div class="trust-badge">
         3 साल का अनुभव <br> 10000 लोगों का भरोसा
       </div>
@@ -392,7 +388,7 @@
           loggedInMobile = activeMobile;
           alert(data.message);
           document.getElementById('login-overlay').style.display = 'none';
-          document.getElementById('display-username').innerText = data.user.username;
+          document.getElementById('display-username').innerText = "Royal Satta 1993";
           userData = data.user;
           loadWallet();
         } else {
@@ -586,7 +582,7 @@
       showModal("Account Settings", `
         <div style="text-align:left; font-size:14px;">
           <label>Username:</label>
-          <input type="text" id="set-username" value="${userData.username || ''}" />
+          <input type="text" id="set-username" value="Royal Satta 1993" />
           <label>Mobile Number:</label>
           <input type="text" id="set-mobile" value="${userData.mobile || loggedInMobile}" disabled />
           <button class="save-btn" onclick="saveSettings()">Save Changes</button>
@@ -595,9 +591,7 @@
     }
 
     function saveSettings() {
-      let u = document.getElementById('set-username').value;
-      if(u) userData.username = u;
-      document.getElementById('display-username').innerText = userData.username;
+      document.getElementById('display-username').innerText = "Royal Satta 1993";
       alert('Settings updated successfully!');
       closeModal();
     }
@@ -622,7 +616,7 @@
           document.getElementById('wallet-balance').innerText = `₹ ${data.balance.toFixed(2)}`;
           document.getElementById('game-wallet').innerText = `₹ ${data.balance.toFixed(2)}`;
           document.getElementById('funds-wallet-amt').innerText = `₹ ${data.balance.toFixed(2)}`;
-          document.getElementById('display-username').innerText = data.username;
+          document.getElementById('display-username').innerText = "Royal Satta 1993";
         }
       } catch (e) { console.error(e); }
     }
