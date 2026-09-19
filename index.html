@@ -793,3 +793,33 @@
   </script>
 </body>
 </html>
+<!-- WhatsApp Contact Link with Icon -->
+<a id="whatsappLink" href="#" target="_blank" style="text-decoration: none; color: green; font-weight: bold; display: inline-flex; align-items: center; gap: 8px;">
+    <i class="fab fa-whatsapp" style="font-size: 24px; color: #25D366;"></i> 
+    <span id="whatsappText">WhatsApp Karein</span>
+</a>
+
+<!-- Telegram Link -->
+<a id="telegramLink" href="#" target="_blank" style="text-decoration: none; color: #0088cc; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; margin-left: 15px;">
+    <i class="fab fa-telegram" style="font-size: 24px; color: #0088cc;"></i> 
+    <span>Telegram Join Karein</span>
+</a>
+
+<script>
+    // Server se latest settings load karne ka code
+    fetch('/api/settings')
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                let waNumber = data.appSettings.whatsappNumber;
+                let tgLink = data.appSettings.telegramChannel;
+                
+                // WhatsApp link aur text update karna
+                document.getElementById('whatsappLink').href = `https://wa.me/${waNumber}`;
+                document.getElementById('whatsappText').innerText = waNumber;
+                
+                // Telegram link update karna
+                document.getElementById('telegramLink').href = tgLink;
+            }
+        });
+</script>
