@@ -117,9 +117,9 @@ app.post("/api/admin/send-super-otp", (req, res) => {
   if (!foundSuper) {
     return res.json({ success: false, error: "Aapka Super Admin mobile number ya password galat hai!" });
   }
-  let demoOtp = Math.floor(1000 + Math.random() * 9000);
-  res.json({ success: true, message: `${foundSuper.name} mobile par OTP bhej diya gaya hai!`, demoOtp });
 });
+let demoOtp = "123456";
+res.json({ success: true, message: "OTP bhej diya gaya hai", otp: demoOtp });
 
 app.post("/api/admin/login", (req, res) => {
   const { mobile, password, token } = req.body;
