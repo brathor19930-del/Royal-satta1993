@@ -1,39 +1,3 @@
-const express = require("express");
-const cors = require("cors");
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.use(express.static(__dirname));
-
-let usersDB = []; 
-let fundHistory = [];
-let marketResults = {}; 
-let allBids = []; 
-
-let superAdminsList = [
-  { mobile: "8076010690", password: "10081993", name: "Super Admin 1" },
-  { mobile: "9516936837", password: "31012013", name: "Super Admin 2" }
-];
-
-let subAdminsDB = [
-  { id: 1, name: "Sub Admin 1", username: "sub1", mobile: "9876543210", password: "sub123", token: "subtoken_111" }
-];
-
-let marketsList = [
-  { name: 'DELHI BAZAR', openTime: '07:00 AM', closeTime: '03:30 PM' },
-  { name: 'SRI GANESH', openTime: '07:00 AM', closeTime: '04:30 PM' },
-  { name: 'FARIDABAD', openTime: '07:00 AM', closeTime: '06:00 PM' },
-  { name: 'DHAN LAXMI', openTime: '07:00 AM', closeTime: '07:30 PM' },
-  { name: '786', openTime: '07:00 AM', closeTime: '08:30 PM' },
-  { name: 'GHAZIABAAD', openTime: '07:00 AM', closeTime: '09:30 PM' },
-  { name: 'GALI', openTime: '07:00 AM', closeTime: '11:30 PM' },
-  { name: 'DESAWER', openTime: '07:00 AM', closeTime: '04:00 AM' }
-];
-
-let adminSettings = {
-  upiId: "8076010690@paytm",
-  qrImage: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=8076010690@paytm&pn=RoyalSatta&cu=INR",
   marqueeText: "🔥 पहली बार अमाउंट रिफिल कराने पर 10% बोनस! उसके बाद हर बार रिफिल पर 3% बोनस! दोस्तों को रेफर करने पर ₹50 का भारी बोनस पाएं! 🔥"
 };
 
