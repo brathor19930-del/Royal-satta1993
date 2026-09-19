@@ -223,3 +223,7 @@ app.get('/api/markets', (req, res) => {
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+let appSettings = {
+    whatsappNumber: "919999999999",
+    telegramChannel: "https://t.me/your_channel"
+};
