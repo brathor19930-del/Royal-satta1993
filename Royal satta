@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Satta 1993 - Live Platform</title>
+    <meta name="theme-color" content="#121212">
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background-color: #121212; color: #e0e0e0; padding-bottom: 90px; }
+        .header { background-color: #1a1a1a; display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        .menu-icon, .wallet { font-size: 22px; color: #d4af37; cursor: pointer; background: none; border: none; }
+        .back-btn { font-size: 26px; color: #d4af37; cursor: pointer; background: none; border: none; font-weight: bold; padding: 0 5px; }
+        .logo { font-size: 19px; font-weight: 900; color: #ffffff; letter-spacing: 1.5px; }
+        .logo span { color: #d4af37; }
+        #authView { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 5000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .auth-card { background: #1a1a1a; border: 2px solid #d4af37; border-radius: 15px; width: 100%; max-width: 360px; padding: 25px; text-align: center; }
+        .auth-card h2 { color: #d4af37; margin-bottom: 20px; font-size: 22px; }
+        .auth-card input { width: 100%; background: #262626; border: 1px solid #444; padding: 14px; border-radius: 8px; color: #fff; font-size: 15px; outline: none; margin-bottom: 15px; text-align: center; }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background-color: #1a1a1a; z-index: 3000; transition: 0.3s ease; border-right: 1px solid #333; }
+        .sidebar.active { left: 0; }
+        .sidebar-header { background: #222; padding: 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #333; }
+        .user-avatar { font-size: 24px; background: #d4af37; color: #000; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }
+        .user-info .phone { font-weight: bold; color: #d4af37; font-size: 15px; }
+        .user-info .status { font-size: 11px; color: #4caf50; }
+        .close-sidebar-btn { margin-left: auto; background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+        .sidebar-links { list-style: none; padding: 10px 0; }
+        .sidebar-links li { padding: 15px 20px; border-bottom: 1px solid #262626; color: #ccc; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; }
+        .sidebar-links li:hover { background: #2a2a2a; color: #d4af37; }
+        .sidebar-links .logout { color: #ff4d4d; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
+        .marquee-container { background-color: #cc0000; color: #ffffff; padding: 12px 0; font-size: 14px; font-weight: bold; overflow: hidden; white-space: nowrap; border-bottom: 2px solid #ff4d4d; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-box { background: #1a1a1a; border: 2px solid #d4af37; border-radius: 12px; width: 85%; max-width: 320px; padding: 20px; text-align: center; }
+        .modal-box h3 { color: #d4af37; margin-bottom: 12px; font-size: 18px; }
+        .modal-box p { font-size: 14px; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
+        .modal-close-btn { background: linear-gradient(90deg, #d4af37, #aa8c2c); color: #000; border: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 15px; width: 100%; }
+        #customPopupOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; }
+        .custom-popup-box { background: #1a1a1a; border: 2px solid #d4af37; border-radius: 15px; width: 90%; max-width: 380px; padding: 30px 20px; text-align: center; position: relative; }
+        .custom-popup-box h3 { color: #d4af37; font-size: 20px; margin-bottom: 15px; }
+        #customPopupText { font-size: 16px; color: #fff; line-height: 1.6; margin-bottom: 25px; display: block; }
+        .popup-close-x { position: absolute; top: 12px; right: 15px; background: none; border: none; color: #d4af37; font-size: 24px; font-weight: bold; cursor: pointer; }
+        .custom-popup-btn { background: linear-gradient(90deg, #d4af37, #aa8c2c); color: #000; border: none; padding: 12px 30px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; }
+        .container { padding: 15px; }
+        .action-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px; }
+        .action-btn-small { background: #1f1f1f; border: 2px solid #d4af37; color: #d4af37; padding: 12px 5px; border-radius: 10px; font-weight: bold; cursor: pointer; text-align: center; font-size: 11px; grid-column: span 2; }
+        .games-section h3 { color: #d4af37; margin-bottom: 15px; font-size: 17px; }
+        .game-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 18px; margin-bottom: 15px; }
+        .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .game-title { font-weight: bold; font-size: 18px; color: #d4af37; }
+        .status-badge { font-size: 12px; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
+        .status-open { background: #1b5e20; color: #4caf50; }
+        .status-closed { background: #b71c1c; color: #ff5252; }
+        .game-time { font-size: 13px; color: #aaa; margin-bottom: 15px; }
+        .game-footer-row { display: flex; justify-content: space-between; align-items: center; }
+        .game-numbers { display: flex; gap: 8px; }
+        .box { background: #262626; border: 1px solid #444; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; color: #d4af37; border-radius: 6px; }
+        .card-play-btn { background: linear-gradient(90deg, #d4af37, #aa8c2c); color: #000; border: none; padding: 10px 22px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .card-play-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .sub-page-view { display: none; }
+        .section-box-title { color: #d4af37; font-size: 14px; font-weight: bold; margin-bottom: 10px; }
+        .input-card { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 15px; margin-bottom: 20px; }
+        .input-card input, .input-card select { width: 100%; background: #262626; border: 1px solid #444; padding: 14px; border-radius: 8px; color: #fff; font-size: 15px; outline: none; margin-bottom: 10px; }
+        .quick-select-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .quick-btn { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 12px 5px; text-align: center; cursor: pointer; }
+        .quick-btn .amt { color: #d4af37; font-weight: bold; font-size: 16px; display: block; margin-bottom: 4px; }
+        .quick-btn .bonus { color: #4caf50; font-size: 11px; font-weight: bold; }
+        .payment-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .mode-card { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 15px 10px; text-align: center; cursor: pointer; }
+        .mode-card.active { border: 2px solid #d4af37; }
+        .mode-card span { color: #d4af37; font-weight: bold; font-size: 13px; }
+        .qr-box { background: #fff; padding: 10px; display: inline-block; border-radius: 8px; margin-bottom: 10px; text-align: center; width: 100%; }
+        .qr-box img { width: 150px; height: 150px; }
+        .proceed-btn { width: 100%; background: linear-gradient(90deg, #d4af37, #aa8c2c); color: #000; border: none; padding: 15px; font-weight: bold; border-radius: 10px; font-size: 16px; cursor: pointer; text-align: center; margin-bottom: 15px; }
+        .admin-chat-box { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 15px; margin-top: 20px; }
+        .chat-messages { height: 180px; overflow-y: auto; background: #262626; border: 1px solid #444; border-radius: 8px; padding: 10px; font-size: 13px; color: #ccc; margin-bottom: 10px; }
+        .chat-msg-item { background: #1f1f1f; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #d4af37; }
+        .refer-card { background: linear-gradient(135deg, #1b1535, #121212); border: 2px solid #d4af37; border-radius: 15px; padding: 25px 20px; text-align: center; margin-bottom: 20px; }
+        .refer-card h2 { color: #fff; font-size: 20px; margin-bottom: 10px; }
+        .refer-card .percentage { color: #d4af37; font-size: 45px; font-weight: bold; margin: 15px 0; }
+        .refer-code-box { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 20px; }
+        .code-text { font-size: 24px; font-weight: bold; color: #d4af37; letter-spacing: 2px; margin-top: 5px; }
+        .copy-link-btn { width: 100%; background: #d4af37; color: #000; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 12px; }
+        .whatsapp-share-btn { width: 100%; background: #25d366; color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        .history-card { background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 15px; margin-bottom: 12px; font-size: 13px; }
+        .history-card p { margin-bottom: 5px; color: #bbb; }
+        .history-card span { color: #d4af37; font-weight: bold; }
+        .no-history { text-align: center; font-size: 16px; font-weight: bold; color: #ff5252; margin-top: 40px; }
+        .rate-card { background: #1a1a1a; border: 1px solid #d4af37; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 15px; }
+        .rate-card h3 { color: #d4af37; font-size: 18px; margin-bottom: 8px; }
+        .rate-card p { font-size: 20px; font-weight: bold; color: #fff; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a; border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { background: none; border: none; color: #888; font-size: 13px; text-align: center; cursor: pointer; font-weight: bold; }
+        .nav-item span { font-size: 18px; }
+        .nav-item.active { color: #d4af37; }
+        .market-view { display: none; }
+        .sub-tabs { display: flex; justify-content: space-around; background: #1a1a1a; border-bottom: 1px solid #333; padding: 12px 0; overflow-x: auto; }
+        .sub-tab-btn { background: none; border: none; color: #888; font-weight: bold; font-size: 13px; cursor: pointer; white-space: nowrap; padding: 0 10px; }
+        .sub-tab-btn.active { color: #d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 4px; }
+        .bidding-tab-content { display: none; padding-top: 10px; }
+        .bidding-tab-content.active { display: block; }
+        .jodi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+        .jodi-item { background: #1a1a1a; border: 1px solid #333; border-radius: 6px; padding: 6px; text-align: center; }
+        .jodi-num { font-size: 13px; color: #d4af37; font-weight: bold; margin-bottom: 4px; }
+        .jodi-input { width: 100%; background: #262626; border: 1px solid #444; border-radius: 4px; color: #fff; text-align: center; font-size: 12px; padding: 6px; outline: none; }
+        .haruf-section-title { color: #d4af37; font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; text-align: center; letter-spacing: 1px; }
+        .haruf-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+        .copy-paste-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .copy-paste-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .copy-paste-card input { width: 100%; background: #262626; border: 1px solid #444; padding: 12px; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+        .radio-group { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; font-size: 13px; color: #ccc; }
+        .table-header-row { display: grid; grid-template-columns: 1fr 1fr 1fr; background: #262626; padding: 10px; border-radius: 6px; text-align: center; font-size: 12px; color: #d4af37; font-weight: bold; margin-top: 15px; }
+        .bidding-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a; border-top: 2px solid #d4af37; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; z-index: 5000; }
+        .total-bid-text { font-size: 14px; color: #d4af37; font-weight: bold; }
+        .place-order-btn { background: linear-gradient(90deg, #d4af37, #aa8c2c); color: #000; border: none; padding: 12px 25px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div id="authView">
+        <div class="auth-card">
+            <h2>ROYAL SATTA 1993</h2>
+            <div id="stepPhone">
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 15px;">Login ya Signup karne ke liye mobile number darj karein</p>
+                <input type="tel" id="loginPhoneInput" placeholder="Mobile Number (10 digits)" maxlength="10">
+                <button class="proceed-btn" onclick="sendOtp()">SEND OTP</button>
+            </div>
+            <div id="stepOtp" style="display: none;">
+                <p style="font-size: 13px; color: #4caf50; margin-bottom: 15px;" id="otpSentMsg">OTP bhej diya gaya hai</p>
+                <input type="text" id="loginOtpInput" placeholder="Enter 4-digit OTP" maxlength="4">
+                <button class="proceed-btn" onclick="verifyOtp()">VERIFY & LOGIN</button>
+            </div>
+            <div id="recaptcha-container" style="margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <div id="customPopupOverlay">
+        <div class="custom-popup-box">
+            <button class="popup-close-x" onclick="closeCustomPopup()">✕</button>
+            <h3>सूचनार्थ</h3>
+            <span id="customPopupText">संदेश</span>
+            <button class="custom-popup-btn" onclick="closeCustomPopup()">ठीक है</button>
+        </div>
+    </div>
+
+    <div id="sidebarDrawer" class="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar" id="sidebarAvatar">👑</div>
+            <div class="user-info">
+                <div class="phone" id="sidebarPhoneDisplay">--</div>
+                <div class="status">● Cloud Active</div>
+            </div>
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">✕</button>
+        </div>
+        <ul class="sidebar-links">
+            <li onclick="goHome(); toggleSidebar()">🏠 Home</li>
+            <li onclick="showProfile(); toggleSidebar()">👤 User Profile</li>
+            <li onclick="showWinningHistory(); toggleSidebar()">🏆 Winning History</li>
+            <li onclick="showHistory(); toggleSidebar()">📜 Bid History</li>
+            <li onclick="showLenDenHistory(); toggleSidebar()">💳 Len-Den History</li>
+            <li onclick="showBanking(); toggleSidebar()">🏦 Banking Details</li>
+            <li onclick="showGameRate(); toggleSidebar()">📊 Game Rate</li>
+            <li onclick="showReferEarn(); toggleSidebar()">🎁 Refer & Earn</li>
+            <li onclick="showCustomerSupport(); toggleSidebar()">💬 Customer Support</li>
+            <li class="logout" onclick="logoutUser()">🚪 Logout</li>
+        </ul>
+    </div>
+    <div id="sidebarOverlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <div id="homeView" class="main-view">
+        <header class="header">
+            <div class="menu-icon" onclick="toggleSidebar()">☰</div>
+            <div class="logo">ROYAL SATTA <span>1993</span></div>
+            <div class="wallet" id="userWalletDisplay">🪙 ₹0</div>
+        </header>
+        <div class="marquee-container">
+            <marquee id="adminMarqueeText">🔥 रॉयल सट्टा 1993 में आपका स्वागत है! Jodi Rate: 10 ka 950 | Haruf Rate: 10 ka 95 🔥</marquee>
+        </div>
+        <main class="container">
+            <div class="action-buttons">
+                <button class="action-btn-small" onclick="showAddPoints()">➕ ADD FUND</button>
+                <button class="action-btn-small" onclick="showWithdrawPoints()">📤 WITHDRAW</button>
+                <button class="action-btn-small" onclick="openWhatsApp()">💬 WHATSAPP</button>
+                <button class="action-btn-small" onclick="openTelegram()">📢 TELEGRAM</button>
+            </div>
+            <div class="games-section">
+                <h3>🔥 ALL MARKETS & TIMINGS</h3>
+                <div id="markets-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Sub Views -->
+    <div id="profileView" class="sub-page-view">
+        <header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">USER PROFILE</div><div class="wallet">🪙 ₹0</div></header>
+        <main class="container"><div class="input-card"><input type="text" id="profileName" placeholder="Username"><input type="text" id="profilePhone" readonly><button class="proceed-btn" onclick="saveProfile()">UPDATE</button></div></main>
+    </div>
+    <div id="winningHistoryView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">WINNING HISTORY</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div id="winningHistoryContainer"><div class="no-history">NO WINNING HISTORY</div></div></main></div>
+    <div id="lenDenHistoryView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">LEN-DEN HISTORY</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div id="lenDenListContainer"><div class="no-history">NO LEN-DEN HISTORY</div></div></main></div>
+    <div id="bankingView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">BANKING DETAILS</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="input-card"><input type="text" placeholder="Bank Name"><input type="text" placeholder="Account Number"><input type="text" placeholder="IFSC"><input type="text" placeholder="UPI ID"><button class="proceed-btn" onclick="saveBanking()">SAVE</button></div></main></div>
+    <div id="gameRateView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">GAME RATE</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="rate-card"><h3>JODI RATE</h3><p>₹10 ka ₹950</p></div><div class="rate-card"><h3>HARUF RATE</h3><p>₹10 ka ₹95</p></div></main></div>
+    <div id="referEarnView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">REFER & EARN</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="refer-card"><h2>Refer & Earn</h2><div class="percentage">3%</div></div><button class="copy-link-btn" onclick="copyReferralLink()">Copy Link</button></main></div>
+    <div id="customerSupportView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">SUPPORT CHAT</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="admin-chat-box"><div class="chat-messages" id="customerSupportChatBox"><div class="chat-msg-item">Admin: नमस्ते!</div></div><div style="display:flex; gap:8px;"><input type="text" id="userSupportMsgInput" placeholder="Message..." style="flex:1; background:#262626; color:#fff; border:1px solid #444; padding:10px; border-radius:6px;"><button onclick="sendSupportMessage()" style="background:#d4af37; border:none; padding:10px 15px; font-weight:bold; border-radius:6px;">SEND</button></div></div></main></div>
+    <div id="historyView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">BID HISTORY</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div id="historyListContainer"><div class="no-history">NO HISTORY</div></div></main></div>
+    <div id="addPointsView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">ADD FUND</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="input-card"><input type="number" id="customAddAmount" placeholder="₹ 100" oninput="updateQrCode()"></div><div class="qr-box"><img id="adminQrImage" src="" alt="QR"></div><button class="proceed-btn" onclick="proceedToPay()">PAY VIA UPI</button><input type="file" id="fundScreenshot" accept="image/*" style="margin-top:15px;"><button class="proceed-btn" style="background:#25d366; color:#fff; margin-top:10px;" onclick="submitAddFundRequest()">SUBMIT SCREENSHOT</button></main></div>
+    <div id="withdrawPointsView" class="sub-page-view"><header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo">WITHDRAW</div><div class="wallet">🪙 ₹0</div></header><main class="container"><div class="input-card"><input type="number" id="withdrawAmountInput" placeholder="Amount"></div><button class="proceed-btn" onclick="submitWithdrawalRequest()">SUBMIT</button></main></div>
+
+    <div id="marketView" class="market-view">
+        <header class="header"><button class="back-btn" onclick="goHome()">&#10094;</button><div class="logo" id="activeMarketTitle">MARKET</div><div class="wallet">🪙 ₹0</div></header>
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" onclick="switchBiddingTab('jodi')">JODI</button>
+            <button class="sub-tab-btn" onclick="switchBiddingTab('crossing')">CROSSING</button>
+            <button class="sub-tab-btn" onclick="switchBiddingTab('haruf')">HARUF</button>
+        </div>
+        <main class="container" style="padding-bottom: 110px;">
+            <div id="tabJodi" class="bidding-tab-content active"><div class="jodi-grid" id="jodiGrid"></div></div>
+            <div id="tabCrossing" class="bidding-tab-content"><div class="input-card"><input type="text" id="crossingNumInput" placeholder="Crossing (e.g. 1234)"><input type="number" id="crossingAmtInput" placeholder="Amount" oninput="calculateTotal()"></div></div>
+            <div id="tabHaruf" class="bidding-tab-content"><div class="haruf-section-title">ANDAR</div><div class="haruf-grid" id="andarHarufGrid"></div><div class="haruf-section-title">BAHAR</div><div class="haruf-grid" id="baharHarufGrid"></div></div>
+        </main>
+        <footer class="bidding-footer"><div class="total-bid-text">TOTAL: <span id="totalBidAmount">₹0</span></div><button class="place-order-btn" onclick="placeOrder()">PLACE ORDER</button></footer>
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item" onclick="openExternalLink()"><span>🏆</span><br>Results</button>
+        <button class="nav-item" onclick="showHistory()"><span>📜</span><br>History</button>
+        <button class="nav-item active" onclick="goHome()"><span>🏠</span><br>Home</button>
+        <button class="nav-item" onclick="openExternalLink()"><span>📊</span><br>Chart</button>
+        <button class="nav-item" onclick="showReferEarn()"><span>↗️</span><br>Share</button>
+    </nav>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmaCMti9MbP8AFc3mbbRYhadF-q8iT1x8",
+            authDomain: "royal-satta-1993-d932d.firebaseapp.com",
+            projectId: "royal-satta-1993-d932d",
+            storageBucket: "royal-satta-1993-d932d.firebasestorage.app",
+            messagingSenderId: "134469711324",
+            appId: "1:134469711324:web:6e30c333eb0dbaa89bcb19",
+            measurementId: "G-S5ZF4B8RC8"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const ADMIN_CONFIG = { whatsappNumber: "8076010690", telegramLink: "https://telegram.org", resultsChartUrl: "https://share.google/uimwE99ysjKlxQqWn", upiId: "royal1993@paytm", upiName: "RoyalSatta", qrCodeApiUrl: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" };
+        let currentUserPhone = "", userWalletBalance = 0, userName = "Royal User", currentActiveMarket = "", activeTab = 'jodi', verificationResult = null;
+        let bidHistoryList = [], winningHistoryList = [], lenDenHistoryList = [], supportChatList = [{ sender: 'admin', text: 'नमस्ते! सहायता के लिए यहाँ लिखें।' }];
+        let marketResults = { "DELHI BAZAR": "--", "SRIGANESH": "--", "FARIDABAD": "--", "DHAN LAXMI": "--", "786": "--", "GHAZIABAD": "--", "GALI": "--", "DESAWER": "--" };
+
+        function showCustomAlert(msg) { document.getElementById('customPopupText').innerText = msg; document.getElementById('customPopupOverlay').style.display = 'flex'; }
+        function closeCustomPopup() { document.getElementById('customPopupOverlay').style.display = 'none'; }
+        function getCurrentDateTime() { return new Date().toLocaleString(); }
+        function updateWalletUI() {
+            document.querySelectorAll('.wallet').forEach(w => w.innerText = '🪙 ₹' + userWalletBalance);
+            if(currentUserPhone) document.getElementById('sidebarPhoneDisplay').innerText = currentUserPhone;
+        }
+
+        window.onload = function() {
+            document.getElementById('authView').style.display = 'flex';
+            renderMarkets(); buildBiddingGrids(); buildHarufGrids(); updateQrCode(); renderSupportChat();
+        };
+
+        function sendOtp() {
+            let phone = document.getElementById('loginPhoneInput').value.trim();
+            if(phone.length !== 10) { showCustomAlert('10 अंकों का नंबर दर्ज करें!'); return; }
+            currentUserPhone = phone;
+            if(phone === '7581904353') {
+                document.getElementById('stepPhone').style.display = 'none';
+                document.getElementById('stepOtp').style.display = 'block';
+                document.getElementById('otpSentMsg').innerText = "Master Mode: Enter OTP '1993'";
+                return;
+            }
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
+            }
+            auth.signInWithPhoneNumber("+91" + phone, window.recaptchaVerifier).then((res) => {
+                verificationResult = res;
+                document.getElementById('stepPhone').style.display = 'none';
+                document.getElementById('stepOtp').style.display = 'block';
+                document.getElementById('otpSentMsg').innerText = `OTP भेजा गया: ${phone}`;
+            }).catch((err) => { showCustomAlert('SMS Error: ' + err.message); });
+        }
+
+        function verifyOtp() {
+            let otp = document.getElementById('loginOtpInput').value.trim();
+            if(currentUserPhone === '7581904353' && otp === '1993') { fetchUserDataFromCloud(); return; }
+            if(!verificationResult) { showCustomAlert('Pehle OTP bhejein'); return; }
+            verificationResult.confirm(otp).then(() => { fetchUserDataFromCloud(); }).catch(() => { showCustomAlert('गलत OTP!'); });
+        }
+
+        async function fetchUserDataFromCloud() {
+            let doc = await db.collection("users").doc(currentUserPhone).get();
+            if (doc.exists) {
+                let data = doc.data();
+                userWalletBalance = data.balance || 0; userName = data.name || "Royal User";
+                bidHistoryList = data.bids || []; winningHistoryList = data.wins || []; lenDenHistoryList = data.lenden || [];
+            } else {
+                userWalletBalance = 1000;
+                await db.collection("users").doc(currentUserPhone).set({ phone: currentUserPhone, balance: 1000, name: "Royal User", bids: [], wins: [], lenden: [] });
+            }
+            document.getElementById('authView').style.display = 'none';
+            updateWalletUI();
+            showCustomAlert('लॉगिन सफल!');
+        }
+
+        async function saveUserDataToCloud() {
+            if(!currentUserPhone) return;
+            await db.collection("users").doc(currentUserPhone).set({ phone: currentUserPhone, balance: userWalletBalance, name: userName, bids: bidHistoryList, wins: winningHistoryList, lenden: lenDenHistoryList }, { merge: true });
+        }
+
+        function logoutUser() { auth.signOut().then(() => location.reload()); }
+        function toggleSidebar() { document.getElementById('sidebarDrawer').classList.toggle('active'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+        function openWhatsApp() { window.open(`https://wa.me/91${ADMIN_CONFIG.whatsappNumber}`, '_blank'); }
+        function openTelegram() { window.open(ADMIN_CONFIG.telegramLink, '_blank'); }
+        function openExternalLink() { window.open(ADMIN_CONFIG.resultsChartUrl, '_blank'); }
+
+        function hideAllViews() {
+            ['homeView','profileView','winningHistoryView','lenDenHistoryView','bankingView','gameRateView','referEarnView','historyView','addPointsView','withdrawPointsView','customerSupportView','marketView'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById('bottomNav').style.display = 'flex';
+        }
+        function goHome() { hideAllViews(); document.getElementById('homeView').style.display = 'block'; renderMarkets(); }
+        function showProfile() { hideAllViews(); document.getElementById('profileView').style.display = 'block'; document.getElementById('profilePhone').value = currentUserPhone; document.getElementById('profileName').value = userName; }
+        function showWinningHistory() { hideAllViews(); document.getElementById('winningHistoryView').style.display = 'block'; }
+        function showLenDenHistory() { hideAllViews(); document.getElementById('lenDenHistoryView').style.display = 'block'; }
+        function showBanking() { hideAllViews(); document.getElementById('bankingView').style.display = 'block'; }
+        function showGameRate() { hideAllViews(); document.getElementById('gameRateView').style.display = 'block'; }
+        function showReferEarn() { hideAllViews(); document.getElementById('referEarnView').style.display = 'block'; }
+        function showCustomerSupport() { hideAllViews(); document.getElementById('customerSupportView').style.display = 'block'; }
+        function showHistory() { hideAllViews(); document.getElementById('historyView').style.display = 'block'; }
+        function showAddPoints() { hideAllViews(); document.getElementById('addPointsView').style.display = 'block'; updateQrCode(); }
+        function showWithdrawPoints() { hideAllViews(); document.getElementById('withdrawPointsView').style.display = 'block'; }
+
+        async function saveProfile() {
+            userName = document.getElementById('profileName').value.trim() || "Royal User";
+            await saveUserDataToCloud(); showCustomAlert('प्रोफाइल अपडेट हो गई!'); goHome();
+        }
+        function updateQrCode() {
+            let amount = document.getElementById('customAddAmount').value || 100;
+            document.getElementById('adminQrImage').src = ADMIN_CONFIG.qrCodeApiUrl + encodeURIComponent(`upi://pay?pa=${ADMIN_CONFIG.upiId}&pn=${ADMIN_CONFIG.upiName}&am=${amount}&cu=INR`);
+        }
+        function proceedToPay() {
+            window.location.href = `upi://pay?pa=${ADMIN_CONFIG.upiId}&pn=${ADMIN_CONFIG.upiName}&am=${document.getElementById('customAddAmount').value || 100}&cu=INR`;
+        }
+        async function submitAddFundRequest() {
+            let amount = parseInt(document.getElementById('customAddAmount').value);
+            if(!amount || amount <= 0) { showCustomAlert('मान्य राशि दर्ज करें!'); return; }
+            userWalletBalance += amount;
+            lenDenHistoryList.unshift({ type: 'Add Fund', amount: amount, time: getCurrentDateTime() });
+            await saveUserDataToCloud(); updateWalletUI(); showCustomAlert('फंड अनुरोध जमा हुआ!'); goHome();
+        }
+        async function submitWithdrawalRequest() {
+            let amount = parseInt(document.getElementById('withdrawAmountInput').value);
+            if(!amount || amount <= 0 || amount > userWalletBalance) { showCustomAlert('अमान्य राशि या अपर्याप्त बैलेंस!'); return; }
+            userWalletBalance -= amount;
+            lenDenHistoryList.unshift({ type: 'Withdrawal', amount: amount, time: getCurrentDateTime() });
+            await saveUserDataToCloud(); updateWalletUI(); showCustomAlert('निकासी अनुरोध जमा हुआ!'); goHome();
+        }
+
+        const markets = [
+            { name: "DELHI BAZAR", closeTime: "16:30" }, { name: "SRIGANESH", closeTime: "16:30" },
+            { name: "FARIDABAD", closeTime: "18:00" }, { name: "DHAN LAXMI", closeTime: "19:30" },
+            { name: "786", closeTime: "20:30" }, { name: "GHAZIABAD", closeTime: "21:30" },
+            { name: "GALI", closeTime: "23:30" }, { name: "DESAWER", closeTime: "04:30" }
+        ];
+
+        function renderMarkets() {
+            const container = document.getElementById('markets-container');
+            container.innerHTML = '';
+            let now = new Date(), curMins = now.getHours() * 60 + now.getMinutes();
+            markets.forEach(m => {
+                let [h, min] = m.closeTime.split(':').map(Number);
+                let isOpen = m.name === "DESAWER" ? (curMins >= 420 || curMins <= 270) : (curMins >= 420 && curMins <= h * 60 + min);
+                container.innerHTML += `
+                    <div class="game-card">
+                        <div class="game-header"><span class="game-title">${m.name}</span><span class="status-badge ${isOpen ? 'status-open':'status-closed'}">${isOpen ? 'RUNNING':'CLOSED'}</span></div>
+                        <div class="game-time">Close: ${m.closeTime}</div>
+                        <div class="game-footer-row"><div class="game-numbers"><div class="box">-</div><div class="box">-</div></div><button class="card-play-btn" ${isOpen ? `onclick="openMarket('${m.name}')"` : 'disabled'}>PLAY</button></div>
+                    </div>
+                `;
+            });
+        }
+        function openMarket(name) {
+            currentActiveMarket = name; hideAllViews();
+            document.getElementById('marketView').style.display = 'block';
+            document.getElementById('activeMarketTitle').innerText = name;
+            document.getElementById('bottomNav').style.display = 'none';
+            switchBiddingTab('jodi');
+        }
+        function switchBiddingTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.sub-tab-btn').forEach((b, idx) => b.classList.toggle('active', ['jodi','crossing','haruf'][idx] === tab));
+            document.querySelectorAll('.bidding-tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+            calculateTotal();
+        }
+        function buildBiddingGrids() {
+            let jGrid = document.getElementById('jodiGrid'); jGrid.innerHTML = '';
+            for (let i = 0; i <= 99; i++) {
+                let num = i < 10 ? '0' + i : '' + i;
+                jGrid.innerHTML += `<div class="jodi-item"><div class="jodi-num">${num}</div><input type="number" class="jodi-input jodi-bid-input" placeholder="0" oninput="calculateTotal()"></div>`;
+            }
+        }
+        function buildHarufGrids() {
+            let aGrid = document.getElementById('andarHarufGrid'), bGrid = document.getElementById('baharHarufGrid');
+            aGrid.innerHTML = ''; bGrid.innerHTML = '';
+            for (let i = 0; i <= 9; i++) {
+                aGrid.innerHTML += `<div class="jodi-item"><div class="jodi-num">A-${i}</div><input type="number" class="jodi-input haruf-bid-input" placeholder="0" oninput="calculateTotal()"></div>`;
+                bGrid.innerHTML += `<div class="jodi-item"><div class="jodi-num">B-${i}</div><input type="number" class="jodi-input haruf-bid-input" placeholder="0" oninput="calculateTotal()"></div>`;
+            }
+        }
+        function calculateTotal() {
+            let total = 0;
+            if(activeTab === 'jodi') document.querySelectorAll('.jodi-bid-input').forEach(i => total += parseInt(i.value) || 0);
+            else if(activeTab === 'crossing') total += parseInt(document.getElementById('crossingAmtInput').value) || 0;
+            else if(activeTab === 'haruf') document.querySelectorAll('.haruf-bid-input').forEach(i => total += parseInt(i.value) || 0);
+            document.getElementById('totalBidAmount').innerText = '₹' + total;
+        }
+        async function placeOrder() {
+            let total = parseInt(document.getElementById('totalBidAmount').innerText.replace('₹','')) || 0;
+            if(total <= 0 || total > userWalletBalance) { showCustomAlert('अमान्य राशि या अपर्याप्त बैलेंस!'); return; }
+            userWalletBalance -= total;
+            await saveUserDataToCloud(); updateWalletUI(); showCustomAlert('ऑर्डर सफल!'); goHome();
+        }
+        function sendSupportMessage() {
+            let input = document.getElementById('userSupportMsgInput');
+            if(!input.value.trim()) return;
+            supportChatList.push({ sender: 'user', text: input.value }); input.value = '';
+            renderSupportChat();
+        }
+        function renderSupportChat() {
+            let box = document.getElementById('customerSupportChatBox');
+            if(!box) return;
+            box.innerHTML = '';
+            supportChatList.forEach(m => box.innerHTML += `<div class="chat-msg-item" style="border-left-color:${m.sender=='admin'?'#d4af37':'#4caf50'}"><b>${m.sender}:</b> ${m.text}</div>`);
+        }
+        function copyReferralLink() { navigator.clipboard.writeText(window.location.href); showCustomAlert('लिंक कॉपी हो गया!'); }
+    </script>
+</body>
+</html>
